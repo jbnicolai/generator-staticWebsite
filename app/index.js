@@ -63,11 +63,11 @@ var MyTemplateGenerator = yeoman.generators.Base.extend({
           name   : '使わない',
           value  : 'none'
         }, {
+          name   : 'assemble',
+          value  : 'assemble'
+        }, {
           name   : 'jade',
           value  : 'jade'
-        }, {
-          name   : 'ect',
-          value  : 'ect'
         }]
       },
       {
@@ -158,12 +158,14 @@ var MyTemplateGenerator = yeoman.generators.Base.extend({
 
   app: function () {
 
-    this.mkdir('libs');
     this.mkdir('htdocs');
-    this.mkdir('htdocs/common/img');
-    this.mkdir('htdocs/common/css');
-    this.mkdir('htdocs/common/js');
-    this.mkdir('htdocs/common/js/libs');
+    this.mkdir('htdocs/assets');
+    this.mkdir('src/assets');
+    this.mkdir('src/assets/img');
+    this.mkdir('src/assets/js');
+    this.mkdir('src/assets/js/libs');
+
+    this.copy('htdocs/assets/css/utils.min.css', this.src + '/assets/css/utils.min.css');
 
     this.template('_package.json', 'package.json');
     this.template('_bower.json', 'bower.json');
@@ -172,13 +174,13 @@ var MyTemplateGenerator = yeoman.generators.Base.extend({
     // html
     switch(this.html) {
       case 'none':
-        this.copy('htdocs/index.html', 'htdocs/index.html');
+        this.copy('htdocs/index.html', this.dist + '/index.html');
+        break;
+      case 'assemble':
+        this.copy('htdocs/index.html', this.src + '/assemble/pages/index.hbs');
         break;
       case 'jade':
-        this.copy('src/jade/index.jade', 'src/jade/index.jade');
-        break;
-      case 'ect':
-        this.copy('src/ect/index.ect', 'src/ect/index.ect');
+        this.copy('src/jade/index.jade', this.src + '/jade/index.jade');
         break;
     }
     if (this.htmllint) {
@@ -188,10 +190,10 @@ var MyTemplateGenerator = yeoman.generators.Base.extend({
     // css
     switch(this.css) {
       case 'stylus':
-        this.copy('src/styl/style.styl', 'src/styl/style.styl');
+        this.copy('src/styl/style.styl', this.src + '/styl/style.styl');
         break;
       case 'sass':
-        this.copy('src/scss/style.scss', 'src/scss/style.scss');
+        this.copy('src/scss/style.scss', this.src + '/scss/style.scss');
         break;
     }
     if (this.csslint) {
@@ -200,13 +202,13 @@ var MyTemplateGenerator = yeoman.generators.Base.extend({
 
     // javascript
     if (this.jshint) {
-      this.copy('src/js/script.js', 'src/js/script.js');
+      this.copy('src/js/script.js', this.src + '/js/script.js');
       this.copy('jshintrc', '.jshintrc');
     }
 
     // ユーティリティ
     if (this.sprite) {
-      this.mkdir('sprites');
+      this.mkdir(this.src + '/assets/sprites');
     }
 
   },

@@ -10,11 +10,16 @@
   "license": "MIT",
   "readFilename": "README.md",
   "devDependencies": {
+    "underscore":"~1.6.0",
     "grunt": "~0.4.4",
+    "grunt-license-saver": "0.0.0",
+    "grunt-contrib-uglify": "~0.4.0",
+    "grunt-bower-concat": "~0.2.4",
+    "grunt-contrib-copy": "0.5.0",
     "grunt-contrib-watch": "~0.6.1", <% if (jshint) { %>
     "grunt-contrib-jshint": "~0.10.0", <% } if (html === 'jade') { %>
-    "grunt-contrib-jade" : "~0.11.0", <% } if (html === 'ect') { %>
-    "grunt-ect" : "~0.1.2",  <% } if (htmllint) { %>
+    "grunt-contrib-jade" : "~0.11.0", <% } if (html === 'assemble') { %>
+    "assemble" : "~0.4.37",  <% } if (htmllint) { %>
     "grunt-htmlhint" : "~0.4.0",  <% } if (css === 'stylus') { %>
     "grunt-contrib-stylus": "~0.15.0", <% } if (css === 'sass') { %>
     "grunt-contrib-compass": "~0.7.2", <% } if (csslint) { %>

@@ -1,14 +1,16 @@
 # <%= projectname %>
 
-## ビルド方法
+## ビルドに必要なアプリケーション
 
-node.js がインストールされていることが前提です(Sass, Compassを使う場合はSass, Compassも)。
+- [Grunt: The JavaScript Task Runner](http://gruntjs.com/)
+- [Bower - A package manager for the web](http://bower.io/)
 
 ## モジュールのインストール
 
 ```
-cd プロジェクトルート(package.jsonが存在する場所)
+cd プロジェクトルート(bower.json, package.jsonが存在する場所)
 npm install
+bower install
 ```
 
 ## ファイルの変更を監視して継続的ビルド

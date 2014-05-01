@@ -11,6 +11,10 @@ module.exports = (grunt) ->
   for taskName of pkg.devDependencies
     if taskName.substring(0, 6) == 'grunt-' then grunt.loadNpmTasks taskName
 
+  <% if (html === 'assemble') { %>
+  grunt.task.loadNpmTasks 'assemble'
+  <% } %>
+
   config =
 
     pkg: grunt.file.readJSON('package.json')
@@ -32,21 +36,17 @@ module.exports = (grunt) ->
         ext   : '.html'
     <% } %>
 
-    <% if (html === 'ect') { %>
+    <% if (html === 'assemble') { %>
     ###
-    grunt-ect
+    assemble
     @ htmlファイルをビルド
-    @ _付きファイルはパーシャルファイルなのでhtmlへの出力はしない
     ###
-    ect:
-      dist:
-        options:
-          pretty : true
+    assemble:
+      files:
         expand: true
-        cwd   : '<%%= pkg.path.src %>/ect'
-        src   : ['**/!(_)*.ect']
+        cwd   : '<%%= pkg.path.src %>/assemble/pages'
+        src   : ['**/*.hbs']
         dest  : '<%%= pkg.path.dist %>'
-        ext   : '.html'
     <% } %>
 
     <% if (htmllint) { %>
@@ -72,7 +72,7 @@ module.exports = (grunt) ->
         expand: true
         cwd   : '<%%= pkg.path.src %>/styl'
         src   : ['**/!(_)*.styl']
-        dest  : '<%%= pkg.path.dist %>/common/css'
+        dest  : '<%%= pkg.path.src %>/assets/css'
         ext   : '.css'
     <% } %>
 
@@ -86,8 +86,8 @@ module.exports = (grunt) ->
       dist:
         options:
           sassDir  : '<%%= pkg.path.src %>/scss'
-          cssDir   : '<%%= pkg.path.dist %>/common/css'
-          imagesDir: '<%%= pkg.path.dist %>/common/img'
+          cssDir   : '<%%= pkg.path.src %>/assets/css'
+          imagesDir: '<%%= pkg.path.src %>/assets/img'
           relativeAssets: true
           noLineComments: true
           assetCacheBuster: false
@@ -103,7 +103,7 @@ module.exports = (grunt) ->
       lax:
         options:
           import: false
-        src: [ '<%%= pkg.path.dist %>/common/css/**/*.css' ]
+        src: [ '<%%= pkg.path.src %>/assets/css/**/*.css' ]
     <% } %>
 
     <% if (jshint) { %>
@@ -128,7 +128,7 @@ module.exports = (grunt) ->
     concat:
       dist:
         files:
-          '<%%= pkg.path.dist %>/common/js/scripts.js': [
+          '<%%= pkg.path.src %>/assets/js/scripts.js': [
             
           ]
     <% } %>
@@ -141,9 +141,9 @@ module.exports = (grunt) ->
       dynamic:
         files:
           expand: true
-          cwd: '<%%= pkg.path.dist %>/common/',
+          cwd: '<%%= pkg.path.src %>/assets/img',
           src: ['**/*.{png,jpg,gif}']
-          dest: '<%%= pkg.path.dist %>/common/'
+          dest: '<%%= pkg.path.src %>/assets/img'
     <% } %>
 
     <% if (sprite) { %>
@@ -154,8 +154,8 @@ module.exports = (grunt) ->
     sprite:
       dist:
         src      : 'sprites/*.png'
-        destImg  : '<%%= pkg.path.dist %>/common/img/sprite.png'
-        destCSS  : '<%%= pkg.path.dist %>/common/css/sprite.css'
+        destImg  : '<%%= pkg.path.src %>/assets/img/sprite.png'
+        destCSS  : '<%%= pkg.path.src %>/assets/css/sprite.css'
         imgPath  : "../img/sprite.png"
         padding  : 10
         algorithm: "binary-tree"
@@ -177,6 +177,60 @@ module.exports = (grunt) ->
           hostname: '0.0.0.0'
           spawn   : false
     <% } %>
+
+    ###
+    grunt-contrib-copy
+    @ アセッツのコピー
+    ###
+    copy:
+      assets:
+        expand : true
+        cwd    : '<%%= pkg.path.src %>/assets'
+        src    : [
+          '**/*'
+          '!sprites'
+        ]
+        dest   : '<%%= pkg.path.dist %>/assets'
+
+    ###
+    grunt-bower-concat
+    @ Bowerライブラリ圧縮
+    ###
+    bower_concat:
+      all:
+        dest: '<%%= pkg.path.src %>/assets/js/libs/vendor.js'
+        exclude: [
+          'jquery',
+          'modernizr',
+          'underscore',
+          'lodash'
+        ]
+        dependencies: 
+          'jQuery.EaseScroller': ['EaseStepper', 'jquery.easing']
+        bowerOptions:
+          relative: false
+
+    ###
+    grunt-license-saver
+    @ ライブラリライセンス管理
+    ###
+    'save_license':
+      'libs' :
+        'src'  : ['<%%= pkg.path.src %>/assets/js/libs/vendor.js']
+        'dest' : '<%%= pkg.path.src %>/assets/js/libs/license.text'
+
+    ###
+    grunt-contrib-uglify
+    @ js圧縮
+    ###
+    uglify:
+      options:
+        banner: '/* Libraries license: "./license.txt" */'
+      vendor:
+        files:
+          '<%%= pkg.path.src %>/assets/js/libs/vendor.min.js': [
+            '<%%= pkg.path.src %>/assets/js/libs/vendor.js'
+          ]
 
     ###
     grunt-notify
@@ -203,12 +257,12 @@ module.exports = (grunt) ->
       html:
         files: [
           <% if (html === 'jade') { %>'<%%= pkg.path.src %>/jade/**/*.jade'<% } %>
-          <% if (html === 'ect') { %>'<%%= pkg.path.src %>/ect/**/*.ect'<% } %>
+          <% if (html === 'assemble') { %>'<%%= pkg.path.src %>/assemble/**/*.hbs'<% } %>
           <% if (html === 'none') { %>'<%%= pkg.path.dist %>/**/*.html'<% } %>
         ]
         tasks: [
           <% if (html === 'jade') { %>'jade'<% } %>
-          <% if (html === 'ect') { %>'ect'<% } %>
+          <% if (html === 'assemble') { %>'assemble'<% } %>
           <% if (htmllint) { %>'htmlhint'<% } %>
           'notify:build'
         ]
@@ -216,7 +270,7 @@ module.exports = (grunt) ->
         files: [
           <% if (css === 'stylus') { %>'<%%= pkg.path.src %>/styl/**/*.styl'<% } %>
           <% if (css === 'sass') { %>'<%%= pkg.path.src %>/scss/**/*.scss'<% } %>
-          <% if (css === 'none') { %>'<%%= pkg.path.dist %>/css/**/*.css'<% } %>
+          <% if (css === 'none') { %>'<%%= pkg.path.src %>/assets/css/**/*.css'<% } %>
         ]
         tasks: [
           <% if (css === 'stylus') { %>'stylus'<% } %>
@@ -240,8 +294,10 @@ module.exports = (grunt) ->
 
   # grunt start
   grunt.registerTask 'start', [
+    'bower_concat'
+    'save_license'
     <% if (html === 'jade') { %>'jade'<% } %>
-    <% if (html === 'ect') { %>'ect'<% } %>
+    <% if (html === 'assemble') { %>'assemble'<% } %>
     <% if (htmllint) { %>'htmlhint'<% } %>
     <% if (sprite) { %>'sprite'<% } %>
     <% if (css === 'stylus') { %>'stylus'<% } %>
@@ -249,6 +305,8 @@ module.exports = (grunt) ->
     <% if (csslint) { %>'csslint'<% } %>
     <% if (jshint) { %>'jshint'<% } %>
     <% if (concat) { %>'concat'<% } %>
+    'uglify'
+    'copy:assets'
     'notify:watch'
     <% if (connect) { %>'connect'<% } %>
     'watch'
@@ -256,8 +314,10 @@ module.exports = (grunt) ->
 
   # grunt build
   grunt.registerTask 'build', [
+    'bower_concat'
+    'save_license'
     <% if (html === 'jade') { %>'jade'<% } %>
-    <% if (html === 'ect') { %>'ect'<% } %>
+    <% if (html === 'assemble') { %>'assemble'<% } %>
     <% if (htmllint) { %>'htmlhint'<% } %>
     <% if (sprite) { %>'sprite'<% } %>
     <% if (css === 'stylus') { %>'stylus'<% } %>
@@ -265,5 +325,7 @@ module.exports = (grunt) ->
     <% if (csslint) { %>'csslint'<% } %>
     <% if (jshint) { %>'jshint'<% } %>
     <% if (concat) { %>'concat'<% } %>
+    'uglify'
+    'copy:assets'
     'notify:build'
   ]

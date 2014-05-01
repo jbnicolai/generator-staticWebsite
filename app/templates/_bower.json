@@ -1,17 +1,20 @@
 {
   "name": "<%= projectname %>",
   "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
   "dependencies": {
     "skk.js": "git://github.com/ANTON072/skk.js",
-    "utils.css": "git://github.com/ANTON072/utils.css",
     "jQuery.ImgLoader":"git://github.com/Takazudo/jQuery.ImgLoader",
     "jQuery.socialthings":"git://github.com/Takazudo/jQuery.socialthings",
     "jQuery.EaseScroller":"git://github.com/Takazudo/jQuery.EaseScroller",
     "EaseStepper":"git://github.com/Takazudo/EaseStepper",
-    "jquery.easing": "git://github.com/gdsmith/jquery.easing",
-    "lodash": "~2.4.1",
-    "modernizr": "~2.6.2",
-    "jquery": "~1.11.0"
+    "jquery.easing": "git://github.com/gdsmith/jquery.easing"
   },
   "devDependencies": {}
 }
