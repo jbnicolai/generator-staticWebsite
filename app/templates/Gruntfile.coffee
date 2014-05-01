@@ -103,7 +103,10 @@ module.exports = (grunt) ->
       lax:
         options:
           import: false
-        src: [ '<%%= pkg.path.src %>/assets/css/**/*.css' ]
+        src: [
+          '<%%= pkg.path.src %>/assets/css/**/*.css'
+          '!<%%= pkg.path.src %>/assets/css/utils.min.css'
+        ]
     <% } %>
 
     <% if (jshint) { %>
@@ -116,7 +119,11 @@ module.exports = (grunt) ->
       source:
         expand: true
         cwd: '<%%= pkg.path.src %>/js'
-        src: [ '**/*.js' ]
+        src: [
+          '**/*.js'
+          '!intro.js'
+          '!outro.js'
+        ]
         filter: 'isFile'
     <% } %>
 
@@ -129,7 +136,9 @@ module.exports = (grunt) ->
       dist:
         files:
           '<%%= pkg.path.src %>/assets/js/scripts.js': [
-            
+            '<%%= pkg.path.src %>/js/intro.js'
+            '<%%= pkg.path.src %>/js/script.js'
+            '<%%= pkg.path.src %>/js/outro.js'
           ]
     <% } %>
 
@@ -217,7 +226,7 @@ module.exports = (grunt) ->
     'save_license':
       'libs' :
         'src'  : ['<%%= pkg.path.src %>/assets/js/libs/vendor.js']
-        'dest' : '<%%= pkg.path.src %>/assets/js/libs/license.text'
+        'dest' : '<%%= pkg.path.src %>/assets/js/libs/license.txt'
 
     ###
     grunt-contrib-uglify
@@ -225,7 +234,7 @@ module.exports = (grunt) ->
     ###
     uglify:
       options:
-        banner: '/* Libraries license: "./license.txt" */'
+        banner: '/* Libraries license: "./license.txt" */\n'
       vendor:
         files:
           '<%%= pkg.path.src %>/assets/js/libs/vendor.min.js': [

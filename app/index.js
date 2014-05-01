@@ -203,6 +203,8 @@ var MyTemplateGenerator = yeoman.generators.Base.extend({
     // javascript
     if (this.jshint) {
       this.copy('src/js/script.js', this.src + '/js/script.js');
+      this.copy('src/js/intro.js', this.src + '/js/intro.js');
+      this.copy('src/js/outro.js', this.src + '/js/outro.js');
       this.copy('jshintrc', '.jshintrc');
     }
 
