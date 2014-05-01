@@ -2,38 +2,60 @@
 
 > [Yeoman](http://yeoman.io) generator
 
+## これはなに？
 
-## Getting Started
+Yeoman用のスタティックサイトジェネレータです。  
+Gruntfileを毎回作るのはつらいのでコレを使ってラクをしよう！
 
-### What is Yeoman?
+### HTML
 
-Trick question. It's not a thing. It's this guy:
+- ノーマル / Assemble / Jade の3つから選択できます。
+- バリデーションチェックの要否も選択できます(grunt-htmlhint)。
+- バリデーションのレベルは .htmlhintrc で調整できます。詳しくはこちら。[Rules · yaniswang/HTMLHint Wiki](https://github.com/yaniswang/HTMLHint/wiki/Rules)
 
-![](http://i.imgur.com/JHaAlBJ.png)
+### CSS
 
-Basically, he wears a top hat, lives in your computer, and waits for you to tell him what kind of application you wish to create.
+- ノーマル / Stylus(nib含む) / Sass(Compass含む) の3つから選択できます。
+- バリデーションチェックの要否も選択できます(grunt-contrib-csslint)。
+- バリデーションのレベルは .csslintrc で調整できます。詳しくはこちら。[Rules · CSSLint/csslint Wiki](https://github.com/CSSLint/csslint/wiki/Rules)
 
-Not every new computer comes with a Yeoman pre-installed. He lives in the [npm](https://npmjs.org) package repository. You only have to ask for him once, then he packs up and moves into your hard drive. *Make sure you clean up, he likes new and shiny things.*
+### JavaScript
+
+- バリデーションチェックの要否が選択できます(grunt-contrib-jshint)。
+- バリデーションのレベルは .jshintrc で調整できます。詳しくはこちら。[JSHint Options Reference](http://www.jshint.com/docs/options/)
+- JSファイル結合の要否が選択できます。
+- JSファイルミニファイの要否が選択できます。
+- 必要なライブラリは Bower でダウンロードします。
+- ダウンロードされたライブラリは Grunt を実行すると自動で vendor.js にまとめられます。
+- 依存関係を操作する場合や追加でライブラリをダウンロードする場合は Gruntfile.coffee に追記します。
+
+### その他
+
+- ローカルサーバーの要否を選択できます。
+- 画像最適化の要否を選択できます。
+- CSS Sprite生成の要否を選択できます。
+
+## 使い方
+
+### Yeomanのインストール
 
 ```
 $ npm install -g yo
 ```
 
-### Yeoman Generators
-
-Yeoman travels light. He didn't pack any generators when he moved in. You can think of a generator like a plug-in. You get to choose what type of application you wish to create, such as a Backbone application or even a Chrome extension.
-
-To install generator-staticWebsite from npm, run:
+###  generator-staticWebsiteのインストール
 
 ```
 $ npm install -g generator-staticwebsite
 ```
 
-Finally, initiate the generator:
+### ファイル生成
 
 ```
 $ yo staticWebsite
 ```
+
+-----
 
 ### Getting To Know Yeoman
 
