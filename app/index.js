@@ -171,6 +171,8 @@ var MyTemplateGenerator = yeoman.generators.Base.extend({
     this.template('_bower.json', 'bower.json');
     this.template('Gruntfile.coffee');
 
+    this.copy('editerconfig', '.editerconfig');
+
     // html
     switch(this.html) {
       case 'none':
@@ -194,6 +196,7 @@ var MyTemplateGenerator = yeoman.generators.Base.extend({
         break;
       case 'sass':
         this.copy('src/scss/style.scss', this.src + '/scss/style.scss');
+        this.copy('_Gemfile', 'Gemfile');
         break;
     }
     if (this.csslint) {
