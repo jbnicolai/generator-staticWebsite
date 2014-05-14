@@ -214,7 +214,7 @@ module.exports = (grunt) ->
           'underscore',
           'lodash'
         ]
-        dependencies: 
+        dependencies:
           'jQuery.EaseScroller': ['EaseStepper', 'jquery.easing']
         bowerOptions:
           relative: false
@@ -285,6 +285,7 @@ module.exports = (grunt) ->
           <% if (css === 'stylus') { %>'stylus'<% } %>
           <% if (css === 'compass') { %>'compass'<% } %>
           <% if (csslint) { %>'csslint'<% } %>
+          'copy:assets'
           'notify:build'
         ]
       js:
@@ -294,6 +295,7 @@ module.exports = (grunt) ->
         tasks: [
           <% if (jshint) { %>'jshint'<% } %>
           <% if (concat) { %>'concat'<% } %>
+          'copy:assets'
           'notify:build'
         ]
 
